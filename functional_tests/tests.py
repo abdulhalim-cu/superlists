@@ -3,6 +3,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 from selenium.common.exceptions import WebDriverException
+import os
 
 MAX_WAIT = 10
 
@@ -11,6 +12,9 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
     def setUp(self):
         self.browser = webdriver.Firefox()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = 'http://' + staging_server
 
     def tearDown(self):
         self.browser.quit()
@@ -134,9 +138,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         self.wait_for_row_in_list_table('1: testing')
         input_box = self.browser.find_element_by_id('id_new_item')
         self.assertAlmostEqual(
-            input_box.location['x'] + input_box.size['width'] / 2, 512, delta=10
+            input_box.location['x'] + input_box.size['width'] / 2, 614.5, delta=10
         )
-
 # We can also remove the if __name__=='__main__', since we'll be using django test
 # runner
 # if __name__ == "__main__":
